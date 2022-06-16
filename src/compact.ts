@@ -47,13 +47,23 @@ type _CompactReturn<T extends any[]> = T["length"] extends 0
     ? L extends Falsey
       ? _CompactReturn<R>
       : [L, ..._CompactReturn<R>]
-    : never
-type CompactReturn<T extends any[]> = T["length"] extends 0 ? never[] : _CompactReturn<T>
+    : T[number][]
+type CompactReturn<T extends any[]> = T["length"] extends 0 
+  ? never[] 
+  : _CompactReturn<T>
 
+
+  
 type T0 = CompactReturn<[0, 1, false, 2, '', 'a', undefined, 'b', null, 3]>
 //   ^?
 
 type T1 = CompactReturn<[]>
+//   ^?
+
+type T2 = CompactReturn<string[]>
+//   ^?
+
+type T3 = CompactReturn<(string | number)[]>
 //   ^?
 
 
@@ -68,4 +78,10 @@ const _a = compact_typed([0, 1, false, 2, '', 'a', undefined, 'b', null, 3])
 //    ^?
 
 const _b = compact_typed([])
+//    ^?
+
+const _c = compact_typed([] as string[])
+//    ^?
+
+const _d = compact_typed([] as (string | number)[])
 //    ^?
