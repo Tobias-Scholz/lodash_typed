@@ -4,7 +4,7 @@
 
 Lodash is a great library for JavaScript utility functions. The typings provided by `@types/lodash` are fine for everyday usage. Yet, there is much room for improvement.
 
-```
+```typescript
 import { chunk } from 'lodash'
 
 const a = chunk(['a', 'b', 'c', 'd'], 2)
@@ -13,7 +13,7 @@ const a = chunk(['a', 'b', 'c', 'd'], 2)
 
 The type of `a` is `string[][]`? Yes, but we know better.
 
-```
+```typescript
 import { chunk } from 'lodash-typed'
 
 const _a = chunk(['a', 'b', 'c', 'd'], 2)
