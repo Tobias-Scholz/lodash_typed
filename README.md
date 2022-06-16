@@ -19,8 +19,8 @@ import { chunk } from 'lodash-typed'
 const _a = chunk(['a', 'b', 'c', 'd'], 2)
 // const _a: [["a", "b"], ["c", "d"]]
 
-const _c = chunk(['a', 'b', 0, 'd', 'e'], 2)
-// const _c: [["a", "b"], [0, "d"], ["e"]]
+const _b = chunk(['a', 'b', 0, 'd', 'e'], 2)
+// const _b: [["a", "b"], [0, "d"], ["e"]]
 
-const _e = chunk([] as string[], 2)
+const _c = chunk([] as string[], 2)
 // const _c: string[][]
