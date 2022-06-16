@@ -1,7 +1,5 @@
 ## ⭐ Lodash Wrapper utilizing the full power of TypeScript ⭐ ##
 
----
-
 Lodash is a great library for JavaScript utility functions. The typings provided by `@types/lodash` are fine for everyday usage. Yet, there is much room for improvement.
 
 ```typescript
