@@ -7,6 +7,7 @@ export type Every =
   | boolean
   | Array<Every> 
   | object
+  | undefined
   | {
       [prop: string]: Every
     }
