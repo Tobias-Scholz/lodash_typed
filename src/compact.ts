@@ -41,16 +41,13 @@ type __A = [1, 2, 3, "a"]
 
 type Falsey = 0 | false | undefined | null | ''
 
-type _CompactReturn<T extends any[]> = T["length"] extends 0 
+type CompactReturn<T extends any[]> = T["length"] extends 0 
   ? T
   : T extends [infer L, ...infer R]
     ? L extends Falsey
-      ? _CompactReturn<R>
-      : [L, ..._CompactReturn<R>]
+      ? CompactReturn<R>
+      : [L, ...CompactReturn<R>]
     : T[number][]
-type CompactReturn<T extends any[]> = T["length"] extends 0 
-  ? never[] 
-  : _CompactReturn<T>
 
 
   

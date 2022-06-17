@@ -31,11 +31,11 @@ type _DropReturn<
   ? T
   : T extends [any, ...infer R]
     ? _DropReturn<R, N, Increment<S>>
-    : never[]
+    : []
 
 type DropReturn<T extends any[], N extends number = 1> = T["length"] extends 0 
-  ? never[] 
-  : T extends [any] 
+  ? [] 
+  : T extends [any, ...any[]] 
     ? _DropReturn<T, N>
     : T
 

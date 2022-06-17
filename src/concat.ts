@@ -21,12 +21,11 @@ const e = concat([], 2)
 // ------------------------------------------------------------------------------------------------------------------
 
 
-type _ConcatReturn<T extends any[]> = T extends [infer L, ...infer R]
+type ConcatReturn<T extends any[]> = T extends [infer L, ...infer R]
   ? L extends any[] 
-    ? [...L, ..._ConcatReturn<R>]
-    : [L, ..._ConcatReturn<R>]
+    ? [...L, ...ConcatReturn<R>]
+    : [L, ...ConcatReturn<R>]
   : []
-type ConcatReturn<T extends any[]> = T extends [[]] ? never[] : _ConcatReturn<T>
 
 
 

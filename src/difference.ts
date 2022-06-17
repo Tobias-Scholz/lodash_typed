@@ -22,9 +22,7 @@ type _DifferenceReturn<T extends any[], S> = T["length"] extends 0
       : [L, ..._DifferenceReturn<R, S>]
     : T[number][]
 
-type DifferenceReturn<T extends any[], S extends any[][]> = T["length"] extends 0
-  ? never[]
-  : _DifferenceReturn<T, S[number][number]>
+type DifferenceReturn<T extends any[], S extends any[][]> = _DifferenceReturn<T, S[number][number]>
 
 
   

@@ -31,9 +31,9 @@ type _ChunkReturn<
     : T[number][][]
 
 type ChunkReturn<T extends any[], P extends number> = T extends []
-  ? never[][]
+  ? []
     : P extends 0
-    ? never[][]
+    ? []
   : _ChunkReturn<T, P>
 
 
