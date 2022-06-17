@@ -1,3 +1,5 @@
+import { assert, Equals } from "tsafe"
+
 type LessThen<N1 extends number, N2 extends number> = N1
 
 export type Every =
@@ -12,7 +14,8 @@ export type Every =
       [prop: string]: Every
     }
 
-export type Decrement<T extends number> = [
+
+type DecrementTable = [
   -1,
   0,
   1,
@@ -65,7 +68,9 @@ export type Decrement<T extends number> = [
   48,
   49,
   50
-][T]
+]
+
+export type Decrement<T extends number | string> = DecrementTable[T & keyof DecrementTable]
 
 export type Increment<T extends number> = [
   1,
