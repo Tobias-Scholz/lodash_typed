@@ -1,5 +1,5 @@
 import { drop } from "lodash"
-import { Increment } from "./utils"
+import { Every, Increment } from "../utils"
 
 const a = drop([1, 2, 3])
 //    ^?
@@ -41,7 +41,7 @@ type DropReturn<T extends any[], N extends number = 1> = T["length"] extends 0
 
 
 
-type T0 = DropReturn<[1, 2]> 
+type T0 = DropReturn<[1, 2, 3]> 
 //   ^?
 
 type T1 = DropReturn<[1, 2, 3, "a"], 2> 
@@ -61,3 +61,33 @@ type T5 = DropReturn<(number | string)[], 0>
 
 
 // ------------------------------------------------------------------------------------------------------------------
+
+
+function drop_typed<T extends E[], E extends Every, N extends number = 1>(array: [...T], n?: N): DropReturn<T, N> {
+  return drop(array, n) as any
+}
+
+
+const _a = drop_typed([1, 2, 3])
+//    ^?
+ 
+const _b = drop_typed([1, 2, 3], 2)
+//    ^?
+
+const _c = drop_typed([1, 2, 3], 5)
+//    ^?
+ 
+const _d = drop_typed([1, 2, 3], 0)
+//    ^?
+
+const _e = drop_typed([], 0)
+//    ^?
+
+const _f = drop_typed([1, 2, "a"], 1)
+//    ^?
+
+const _g = drop_typed([] as number[], 2)
+//    ^?
+
+const _h = drop_typed([] as (number | string)[], 2)
+//    ^?

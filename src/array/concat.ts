@@ -1,5 +1,5 @@
 import { concat } from "lodash"
-import { Every } from "./utils"
+import { Every } from "../utils"
 
 const a = concat([0, 1], [2, 3])
 //    ^?
@@ -57,6 +57,7 @@ type T6 = ConcatReturn<[string[], number[]]>
 function concat_typed<T extends ([...S] | Every )[], S extends Every[]>(...array: [...T]): ConcatReturn<T> {
     return concat(array) as any
 }
+
 
 const _a = concat_typed([0, 1], [2, 3])
 //    ^?

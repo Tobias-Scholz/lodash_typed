@@ -1,5 +1,5 @@
 import { difference } from 'lodash'
-import { Every } from "./utils"
+import { Every } from "../utils"
 
 const a = difference(['a', 'b', 'c', 'd', 'e'], ['a', 'b'], ['c'], ['e'])
 //    ^?
@@ -46,6 +46,7 @@ function difference_typed<
 >(array: [...T], ...values: [...V]): DifferenceReturn<T, V> {
   return difference(array, ...values) as any
 }
+
 
 const _a = difference_typed(['a', 3, 'c', 7, 'e'], ['a', 7])
 //    ^?

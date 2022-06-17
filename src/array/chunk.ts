@@ -1,5 +1,5 @@
 import { chunk } from 'lodash'
-import { Every, Test } from "./utils"
+import { Every, Test } from "../utils"
 
 const a = chunk(['a', 'b', 'c', 'd'], 2)
 //    ^?
@@ -69,6 +69,7 @@ type T7 = ChunkReturn<['a', 'b', 'c', 'd', 'e'], 0>
 function chunk_typed<S extends Every, T extends S[], P extends number = 1>(array: [...T], size?: P): ChunkReturn<T, P> {
   return chunk(array, size) as any
 }
+
 
 const _a = chunk_typed(['a', 'b', 'c', 'd'], 2)
 //    ^?

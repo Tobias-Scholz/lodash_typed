@@ -1,5 +1,5 @@
 import { compact } from "lodash"
-import { Every } from "./utils"
+import { Every } from "../utils"
 
 const a = compact([0, 1, false, 2, '', 3])
 //    ^?
@@ -70,6 +70,7 @@ type T3 = CompactReturn<(string | number)[]>
 function compact_typed<S extends Every, T extends S[]>(array: [...T]) : CompactReturn<T> {
     return compact(array) as any
 }
+
 
 const _a = compact_typed([0, 1, false, 2, '', 'a', undefined, 'b', null, 3])
 //    ^?
