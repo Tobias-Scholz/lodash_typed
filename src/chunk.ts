@@ -13,7 +13,9 @@ const c = chunk([], 2)
 const d = chunk(['a'], 0)
 //    ^?
 
+
 // ------------------------------------------------------------------------------------------------------------------
+
 
 type _ChunkReturn<
   T extends any[],
@@ -35,7 +37,7 @@ type ChunkReturn<T extends any[], P extends number> = T extends []
   : _ChunkReturn<T, P>
 
 
-  
+
 type T0 = ChunkReturn<['a', 'b', 'c', 'd'], 2>
 //   ^?
 
@@ -60,7 +62,9 @@ type T6 = ChunkReturn<[], 2>
 type T7 = ChunkReturn<['a', 'b', 'c', 'd', 'e'], 0>
 //   ^?
 
+
 // ------------------------------------------------------------------------------------------------------------------
+
 
 function chunk_typed<S extends Every, T extends S[], P extends number = 1>(array: [...T], size?: P): ChunkReturn<T, P> {
   return chunk(array, size) as any
