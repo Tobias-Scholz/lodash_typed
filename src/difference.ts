@@ -1,5 +1,5 @@
 import { difference } from 'lodash'
-import { Every, Test } from "./utils"
+import { Every } from "./utils"
 
 const a = difference(['a', 'b', 'c', 'd', 'e'], ['a', 'b'], ['c'], ['e'])
 //    ^?
@@ -26,7 +26,7 @@ type DifferenceReturn<T extends any[], S extends any[][]> = T["length"] extends 
   ? never[]
   : _DifferenceReturn<T, S[number][number]>
 
-  
+
   
 type T0 = DifferenceReturn<['a', 'b', 'c', 'd', 'e'], [['a', 'b'], ['c'], ['e']]>
 //   ^?
