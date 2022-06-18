@@ -1,5 +1,5 @@
 import { fill } from "lodash";
-import { Decrement, Every, Increment } from "../utils"
+import { Abs, Decrement, Every, Increment, IsNegative } from "../utils"
 
 const a = fill([1, 2, 3], "a")
 //    ^?
@@ -26,10 +26,6 @@ const f = fill([1, 2, 3, 4, 5, 6], "a", -4, -1)
 
 // ------------------------------------------------------------------------------------------------------------------
 
-
-type Abs<T extends number> = `${T}` extends `-${infer R}` ? R : never
-
-type IsNegative<T extends number> = `${T}` extends `-${number}` ? true : false
 
 type ConvertNegativeIndex<L extends number, I extends string> = I extends "0"
   ? L

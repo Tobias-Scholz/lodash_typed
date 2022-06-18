@@ -125,6 +125,11 @@ export type Increment<T extends number> = [
   50
 ][T]
 
+export type Abs<T extends number> = `${T}` extends `-${infer R}` ? R : never
+
+export type IsNegative<T extends number> = `${T}` extends `-${number}` ? true : false
+
+
 export class Test {
   a!: string
 
