@@ -4,7 +4,7 @@ import { Every } from "../utils"
 const a = concat([0, 1], [2, 3])
 //    ^?
 
-const b = concat([0, 1], [2, "a"])
+const b = concat([0, 1], [2, "a"], "b")
 //    ^?
 
 // @ts-ignore
@@ -35,7 +35,7 @@ type T0 = ConcatReturn<[[0, 1], [2, 3]]>
 type T1 = ConcatReturn<[[0, 1], [2, "a"]]>
 //   ^?
 
-type T2 = ConcatReturn<[[0, 1], [2, "a"], 4]>
+type T2 = ConcatReturn<[[0, "b"], [2, "a"], 4]>
 //   ^?
 
 type T3 = ConcatReturn<[[]]>
@@ -62,7 +62,7 @@ function concat_typed<T extends ([...S] | Every )[], S extends Every[]>(...array
 const _a = concat_typed([0, 1], [2, 3])
 //    ^?
 
-const _b = concat_typed([0, 1], [2, "a"])
+const _b = concat_typed([0, 1], [2, "a"], "b")
 //    ^?
 
 const _c = concat_typed("a", 2, [3], [[4]])
