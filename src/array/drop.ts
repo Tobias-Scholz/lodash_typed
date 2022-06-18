@@ -1,5 +1,5 @@
 import { drop } from "lodash"
-import { Every, Increment } from "../utils"
+import { Every, IfAny, Increment } from "../utils"
 
 const a = drop([1, 2, 3])
 //    ^?
@@ -33,11 +33,18 @@ type _DropReturn<
     ? _DropReturn<R, N, Increment<S>>
     : []
 
-type DropReturn<T extends any[], N extends number = 1> = T["length"] extends 0 
-  ? [] 
-  : T extends [any, ...any[]] 
-    ? _DropReturn<T, N>
-    : T
+type DropReturn<T extends any[], N extends number = 1> = 
+ IfAny<
+  T,
+  any[],   
+  T["length"] extends 0 
+    ? [] 
+    : T extends [any, ...any[]] 
+      ? number extends N 
+        ? T[number][]
+        : _DropReturn<T, N>
+      : T
+  >
 
 
 
@@ -59,6 +66,20 @@ type T4 = DropReturn<number[], 0>
 type T5 = DropReturn<(number | string)[], 0> 
 //   ^?
 
+type T6 = DropReturn<any[], 0> 
+//   ^?
+
+type T7 = DropReturn<any, 0> 
+//   ^?
+
+type T8 = DropReturn<[1, 2, 3, 4], number> 
+//   ^?
+
+type T9 = DropReturn<[1, 2, 3, 4], any> 
+//   ^?
+
+type T10 = DropReturn<any, any> 
+//   ^?
 
 // ------------------------------------------------------------------------------------------------------------------
 

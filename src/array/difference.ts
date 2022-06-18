@@ -1,5 +1,5 @@
 import { difference } from 'lodash'
-import { Every } from "../utils"
+import { Every, IfAny } from "../utils"
 
 const a = difference(['a', 'b', 'c', 'd', 'e'], ['a', 'b'], ['c'], ['e'])
 //    ^?
@@ -22,7 +22,7 @@ type _DifferenceReturn<T extends any[], S> = T["length"] extends 0
       : [L, ..._DifferenceReturn<R, S>]
     : T[number][]
 
-type DifferenceReturn<T extends any[], S extends any[][]> = _DifferenceReturn<T, S[number][number]>
+type DifferenceReturn<T extends any[], S extends any[][]> = IfAny<T, any[], _DifferenceReturn<T, S[number][number]>>
 
 
   
@@ -36,6 +36,18 @@ type T2 = DifferenceReturn<[], [['a', 7]]>
 //   ^?
 
 type T3 = DifferenceReturn<string[], (string | number)[][]>
+//   ^?
+
+type T4 = DifferenceReturn<any[], (string | number)[][]>
+//   ^?
+
+type T5 = DifferenceReturn<string[], any[][]>
+//   ^?
+
+type T6 = DifferenceReturn<any, any[][]>
+//   ^?
+
+type T7 = DifferenceReturn<any, any>
 //   ^?
 
 

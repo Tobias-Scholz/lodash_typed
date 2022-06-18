@@ -1,5 +1,5 @@
 import { includes } from "lodash"
-import { Decrement, Increment, IsNegative, Abs, IsStringRecord } from "../utils"
+import { Decrement, Increment, IsNegative, Abs, IsStringRecord, IfAny, IsAny, ConvertNegativeIndex } from "../utils"
 
 const a = includes([1, 2, 3], 1);
 //    a = true
@@ -16,16 +16,6 @@ const d = includes('abcd', 'bc');
 
 // ------------------------------------------------------------------------------------------------------------------
 
-
-type ConvertNegativeIndex<L extends number, I extends string> = I extends "0"
-  ? L
-  : ConvertNegativeIndex<Decrement<L>, `${Decrement<I> & number}`>
-
-type StringLength<T extends string, I extends number = 0> = T extends `${string}${infer Rest}`
-  ? Rest extends ""
-    ? Increment<I>
-    : StringLength<Rest, Increment<I>>
-  : 0
 
 type IncludesArray<T extends any[], V, S extends number = 0, I extends number = 0> = T["length"] extends 0
   ? false
@@ -48,27 +38,20 @@ type IncludesString<T extends string, V extends string, S extends number = 0, I 
   : boolean
 
 type Includes<T extends Record<string, any> | any[] | string, V, S extends number = 0> = 
-  T extends any[] 
-    ? IncludesArray<
-        T, 
-        V, 
-        IsNegative<S> extends true 
-          ? ConvertNegativeIndex<T["length"], `${Abs<S>}`> extends infer SI extends number 
-            ? SI 
-            : never 
-          : S
-      >
-    : T extends string 
-      ? IncludesString<
+  IsAny<V> extends true ? boolean :
+    T extends any[] 
+      ? IncludesArray<
           T, 
-          V & string, 
-          IsNegative<S> extends true 
-            ? ConvertNegativeIndex<StringLength<T>, `${Abs<S>}`> extends infer SI extends number 
-              ? SI 
-              : never 
-            : S
+          V, 
+          ConvertNegativeIndex<T, S>
         >
-      : IsStringRecord<T> extends true ? boolean : IncludesObject<T, V>
+      : T extends string 
+        ? IncludesString<
+            T, 
+            V & string, 
+            ConvertNegativeIndex<T, S>
+          >
+        : true extends IsStringRecord<T> | IsStringRecord<V> ? boolean : IncludesObject<T, V>
 
 
 type T0 = Includes<[1, 2, 3], 1>
@@ -117,4 +100,13 @@ type T14 = Includes<Record<string, any>, Record<string, any>>
 //   ^?
 
 type T15 = Includes<any, any>
+//   ^?
+
+type T16 = Includes<string, any>
+//   ^?
+
+type T17 = Includes<'abcd', any>
+//   ^?
+
+type T18 = Includes<{ 'a': 1, 'b': 2 }, Record<string, any>>
 //   ^?

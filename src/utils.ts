@@ -135,6 +135,23 @@ export type IfAny<T, Y, N> = 0 extends (1 & T) ? Y : N
 
 export type IsAny<T> = 0 extends (1 & T) ? true : false
 
+type StringLength<T extends string, I extends number = 0> = T extends `${string}${infer Rest}`
+  ? Rest extends ""
+    ? Increment<I>
+    : StringLength<Rest, Increment<I>>
+  : 0
+
+export type _ConvertNegativeIndex<L extends number, I extends string> = I extends "0"
+  ? L
+  : _ConvertNegativeIndex<Decrement<L>, `${Decrement<I> & number}`>
+
+export type ConvertNegativeIndex<T extends any[] | string, N extends number> = 
+  IsNegative<N> extends true 
+  ? _ConvertNegativeIndex<T extends string ? StringLength<T> :  T["length"], `${Abs<N>}`> extends infer SI extends number 
+    ? SI 
+    : never 
+  : N
+  
 export class Test {
   a!: string
 

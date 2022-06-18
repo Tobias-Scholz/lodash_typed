@@ -1,5 +1,5 @@
 import { fill } from "lodash";
-import { Abs, Decrement, Every, Increment, IsNegative } from "../utils"
+import { Abs, ConvertNegativeIndex, Decrement, Every, Increment, IsNegative } from "../utils"
 
 const a = fill([1, 2, 3], "a")
 //    ^?
@@ -25,11 +25,6 @@ const f = fill([1, 2, 3, 4, 5, 6], "a", -4, -1)
 
 
 // ------------------------------------------------------------------------------------------------------------------
-
-
-type ConvertNegativeIndex<L extends number, I extends string> = I extends "0"
-  ? L
-  : ConvertNegativeIndex<Decrement<L>, `${Decrement<I> & number}`>
 
 
 type _FillReturn<
@@ -59,12 +54,8 @@ type FillReturn<T extends any[], C, S extends number = 0, E extends number = T["
   ? _FillReturn<
       T, 
       C, 
-      IsNegative<S> extends true 
-        ? ConvertNegativeIndex<T["length"], `${Abs<S>}`> extends infer NI extends number ? NI : never
-        : S,
-      IsNegative<E> extends true 
-        ? ConvertNegativeIndex<T["length"], `${Abs<E>}`> extends infer NI extends number ? NI : never 
-        : E
+      ConvertNegativeIndex<T, S>,
+      ConvertNegativeIndex<T, E>
     >
   : T
 
