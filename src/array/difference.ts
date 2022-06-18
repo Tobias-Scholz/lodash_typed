@@ -35,6 +35,9 @@ type T1 = DifferenceReturn<['a', 3, 'c', 7, 'e'], [['a', 7]]>
 type T2 = DifferenceReturn<[], [['a', 7]]>
 //   ^?
 
+type T3 = DifferenceReturn<string[], (string | number)[][]>
+//   ^?
+
 
 // ------------------------------------------------------------------------------------------------------------------
 

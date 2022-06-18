@@ -129,6 +129,11 @@ export type Abs<T extends number> = `${T}` extends `-${infer R}` ? R : never
 
 export type IsNegative<T extends number> = `${T}` extends `-${number}` ? true : false
 
+export type IsStringRecord<T> = string extends keyof T ? true : false
+
+export type IfAny<T, Y, N> = 0 extends (1 & T) ? Y : N
+
+export type IsAny<T> = 0 extends (1 & T) ? true : false
 
 export class Test {
   a!: string

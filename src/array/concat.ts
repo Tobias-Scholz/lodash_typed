@@ -1,5 +1,5 @@
 import { concat } from "lodash"
-import { Every } from "../utils"
+import { Every, IfAny, IsAny } from "../utils"
 
 const a = concat([0, 1], [2, 3])
 //    ^?
@@ -21,12 +21,20 @@ const e = concat([], 2)
 // ------------------------------------------------------------------------------------------------------------------
 
 
-type ConcatReturn<T extends any[]> = T extends [infer L, ...infer R]
+type _ConcatReturn<T extends any[]> = T extends [infer L, ...infer R]
   ? L extends any[] 
-    ? [...L, ...ConcatReturn<R>]
-    : [L, ...ConcatReturn<R>]
+    ? [...L, ..._ConcatReturn<R>]
+    : [L, ..._ConcatReturn<R>]
   : []
 
+type ConcatReturn<T extends any[]> = 
+  IfAny<
+    {
+      [K in keyof T]: { [K2 in keyof T[K]]: T[K][K2] }[keyof T[K] & `${bigint}`]
+    }[keyof T & `${bigint}`] | T, 
+    any[], 
+    _ConcatReturn<T>
+  >
 
 
 type T0 = ConcatReturn<[[0, 1], [2, 3]]>
@@ -48,6 +56,15 @@ type T5 = ConcatReturn<[string[], string[]]>
 //   ^?
 
 type T6 = ConcatReturn<[string[], number[]]>
+//   ^?
+
+type T7 = ConcatReturn<[any[], number[]]>
+//   ^?
+
+type T8 = ConcatReturn<[any, number[]]>
+//   ^?
+
+type T9 = ConcatReturn<any>
 //   ^?
 
 
@@ -75,4 +92,10 @@ const _e = concat_typed([], 2)
 //    ^?
 
 const _f = concat_typed([] as string[], [] as number[])
+//    ^?
+
+const _g = concat_typed([] as any[], [] as number[])
+//    ^?
+
+const _h = concat_typed([] as any)
 //    ^?

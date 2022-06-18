@@ -1,5 +1,5 @@
 import { compact } from "lodash"
-import { Every } from "../utils"
+import { Every, IfAny } from "../utils"
 
 const a = compact([0, 1, false, 2, '', 3])
 //    ^?
@@ -41,13 +41,18 @@ type __A = [1, 2, 3, "a"]
 
 type Falsey = 0 | false | undefined | null | ''
 
-type CompactReturn<T extends any[]> = T["length"] extends 0 
-  ? T
-  : T extends [infer L, ...infer R]
-    ? L extends Falsey
-      ? CompactReturn<R>
-      : [L, ...CompactReturn<R>]
-    : T[number][]
+type CompactReturn<T extends any[]> = 
+  IfAny<
+    T, 
+    any[], 
+    T["length"] extends 0 
+      ? T
+      : T extends [infer L, ...infer R]
+        ? L extends Falsey
+          ? CompactReturn<R>
+          : [L, ...CompactReturn<R>]
+        : T[number][]
+  >
 
 
   
@@ -61,6 +66,12 @@ type T2 = CompactReturn<string[]>
 //   ^?
 
 type T3 = CompactReturn<(string | number)[]>
+//   ^?
+
+type T4 = CompactReturn<any[]>
+//   ^?
+
+type T5 = CompactReturn<any>
 //   ^?
 
 

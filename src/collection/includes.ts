@@ -1,5 +1,5 @@
 import { includes } from "lodash"
-import { Decrement, Increment, IsNegative, Abs } from "../utils"
+import { Decrement, Increment, IsNegative, Abs, IsStringRecord } from "../utils"
 
 const a = includes([1, 2, 3], 1);
 //    a = true
@@ -35,7 +35,7 @@ type IncludesArray<T extends any[], V, S extends number = 0, I extends number = 
         ? true
         : IncludesArray<Rest, V, S, I>
       : IncludesArray<Rest, V, S, Increment<I>>
-    : never
+    : boolean
 
 type IncludesObject<T, V> = V extends T[keyof T] ? true : false
 
@@ -45,29 +45,30 @@ type IncludesString<T extends string, V extends string, S extends number = 0, I 
     : I extends S
       ? T extends `${string}${V}${string}` ? true : false
       : IncludesString<Rest, V, S, Increment<I>>
-  : never
+  : boolean
 
-type Includes<T extends Record<string, any> | any[] | string, V, S extends number = 0> = T extends any[] 
-  ? IncludesArray<
-      T, 
-      V, 
-      IsNegative<S> extends true 
-        ? ConvertNegativeIndex<T["length"], `${Abs<S>}`> extends infer SI extends number 
-          ? SI 
-          : never 
-        : S
-    >
-  : T extends string 
-    ? IncludesString<
+type Includes<T extends Record<string, any> | any[] | string, V, S extends number = 0> = 
+  T extends any[] 
+    ? IncludesArray<
         T, 
-        V & string, 
+        V, 
         IsNegative<S> extends true 
-          ? ConvertNegativeIndex<StringLength<T>, `${Abs<S>}`> extends infer SI extends number 
+          ? ConvertNegativeIndex<T["length"], `${Abs<S>}`> extends infer SI extends number 
             ? SI 
             : never 
           : S
       >
-    : IncludesObject<T, V>
+    : T extends string 
+      ? IncludesString<
+          T, 
+          V & string, 
+          IsNegative<S> extends true 
+            ? ConvertNegativeIndex<StringLength<T>, `${Abs<S>}`> extends infer SI extends number 
+              ? SI 
+              : never 
+            : S
+        >
+      : IsStringRecord<T> extends true ? boolean : IncludesObject<T, V>
 
 
 type T0 = Includes<[1, 2, 3], 1>
@@ -104,4 +105,16 @@ type T10 = Includes<'abcd', 'bc', -2>
 //   ^?
 
 type T11 = Includes<'abcd', 'bc', -3>
+//   ^?
+
+type T12 = Includes<number[], number[], -3>
+//   ^?
+
+type T13 = Includes<string, string>
+//   ^?
+
+type T14 = Includes<Record<string, any>, Record<string, any>>
+//   ^?
+
+type T15 = Includes<any, any>
 //   ^?

@@ -1,5 +1,5 @@
 import { chunk } from 'lodash'
-import { Every, Test } from "../utils"
+import { Every, IfAny, IsAny, Test } from "../utils"
 
 const a = chunk(['a', 'b', 'c', 'd'], 2)
 //    ^?
@@ -30,12 +30,23 @@ type _ChunkReturn<
         : _ChunkReturn<Rest, P, [...I, First], R>
     : T[number][][]
 
-type ChunkReturn<T extends any[], P extends number> = T extends []
-  ? []
-    : P extends 0
-    ? []
-  : _ChunkReturn<T, P>
-
+type ChunkReturn<T extends any[], P extends number> = 
+  IsAny<P> extends true
+    ? IsAny<T> extends true 
+      ? any[][]
+      : T[number][][]
+    : IsAny<T> extends true
+      ? P extends 0
+        ? []
+        : any[][]
+      : T extends []
+        ? []
+        : P extends 0 
+          ? [] 
+          : number extends P 
+            ? T[number][][]
+            : _ChunkReturn<T, P>
+    
 
 
 type T0 = ChunkReturn<['a', 'b', 'c', 'd'], 2>
@@ -60,6 +71,30 @@ type T6 = ChunkReturn<[], 2>
 //   ^?
 
 type T7 = ChunkReturn<['a', 'b', 'c', 'd', 'e'], 0>
+//   ^?
+
+type T8 = ChunkReturn<any[], number>
+//   ^?
+
+type T9 = ChunkReturn<any, 0>
+//   ^?
+
+type T10 = ChunkReturn<any, number>
+//   ^?
+
+type T11 = ChunkReturn<any, any>
+//   ^?
+
+type T12 = ChunkReturn<['a', 'b', 'c', 'd', 'e'], number>
+//   ^?
+
+type T13 = ChunkReturn<string[], number>
+//   ^?
+
+type T14 = ChunkReturn<string[], any>
+//   ^?
+
+type T15 = ChunkReturn<['a', 'b', 'c', 'd', 'e'], any>
 //   ^?
 
 
