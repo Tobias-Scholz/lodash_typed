@@ -24,22 +24,22 @@ const f = drop([1, 2, "a"], 2)
 
 
 type _DropReturn<
-  T extends any[], 
+  T extends readonly any[], 
   N extends number, 
   S extends number = 0
 > =  S extends N
   ? T
-  : T extends [any, ...infer R]
+  : T extends readonly [any, ...infer R]
     ? _DropReturn<R, N, Increment<S>>
     : []
 
-type DropReturn<T extends any[], N extends number = 1> = 
+type DropReturn<T extends readonly any[], N extends number = 1> = 
  IfAny<
   T,
   any[],   
   T["length"] extends 0 
     ? [] 
-    : T extends [any, ...any[]] 
+    : T extends readonly [any, ...any[]] 
       ? number extends N 
         ? T[number][]
         : _DropReturn<T, N>
@@ -80,6 +80,10 @@ type T9 = DropReturn<[1, 2, 3, 4], any>
 
 type T10 = DropReturn<any, any> 
 //   ^?
+
+type T11 = DropReturn<readonly [1, 2, 3, 4], 1> 
+//   ^?
+
 
 // ------------------------------------------------------------------------------------------------------------------
 

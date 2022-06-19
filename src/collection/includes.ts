@@ -17,9 +17,9 @@ const d = includes('abcd', 'bc');
 // ------------------------------------------------------------------------------------------------------------------
 
 
-type IncludesArray<T extends any[], V, S extends number = 0, I extends number = 0> = T["length"] extends 0
+type IncludesArray<T extends readonly any[], V, S extends number = 0, I extends number = 0> = T["length"] extends 0
   ? false
-  : T extends [infer L, ...infer Rest] 
+  : T extends readonly [infer L, ...infer Rest] 
     ? I extends S 
       ? L extends V
         ? true
@@ -39,7 +39,7 @@ type IncludesString<T extends string, V extends string, S extends number = 0, I 
 
 type Includes<T extends Record<string, any> | any[] | string, V, S extends number = 0> = 
   IsAny<V> extends true ? boolean :
-    T extends any[] 
+    T extends readonly any[] 
       ? IncludesArray<
           T, 
           V, 
@@ -109,4 +109,10 @@ type T17 = Includes<'abcd', any>
 //   ^?
 
 type T18 = Includes<{ 'a': 1, 'b': 2 }, Record<string, any>>
+//   ^?
+
+type T19 = Includes<readonly [1, 2, 3, 4], 2, 1>
+//   ^?
+
+type T20 = Includes<readonly [1, 2, 3, 4], 2, 3>
 //   ^?

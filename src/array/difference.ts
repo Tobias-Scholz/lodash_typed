@@ -14,15 +14,18 @@ const c = difference([], ['a', 7])
 // ------------------------------------------------------------------------------------------------------------------
 
 
-type _DifferenceReturn<T extends any[], S> = T["length"] extends 0 
+type _DifferenceReturn<T extends readonly any[], S> = T["length"] extends 0 
   ? T
-  : T extends [infer L, ...infer R]
+  : T extends readonly [infer L, ...infer R]
     ? L extends S
       ? _DifferenceReturn<R, S>
       : [L, ..._DifferenceReturn<R, S>]
     : T[number][]
 
-type DifferenceReturn<T extends any[], S extends any[][]> = IfAny<T, any[], _DifferenceReturn<T, S[number][number]>>
+type DifferenceReturn<
+  T extends readonly any[], 
+  S extends readonly (readonly any[])[]
+> = IfAny<T, any[], _DifferenceReturn<T, S[number][number]>>
 
 
   
@@ -50,6 +53,8 @@ type T6 = DifferenceReturn<any, any[][]>
 type T7 = DifferenceReturn<any, any>
 //   ^?
 
+type T8 = DifferenceReturn<readonly ['a', 3, 'c', 7, 'e'], readonly [ readonly ['a', 7]]>
+//   ^?
 
 // ------------------------------------------------------------------------------------------------------------------
 

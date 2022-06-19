@@ -28,7 +28,7 @@ const f = fill([1, 2, 3, 4, 5, 6], "a", -4, -1)
 
 
 type _FillReturn<
-  T extends any[], 
+  T extends readonly any[], 
   C, 
   S extends number, 
   E extends number, 
@@ -36,7 +36,7 @@ type _FillReturn<
   F extends boolean = false
 > = T["length"] extends 0 
   ? []
-  : T extends [infer First, ...infer Rest] 
+  : T extends readonly [infer First, ...infer Rest] 
       ? I extends S
         ? I extends E 
             ? [First, ..._FillReturn<Rest, C, S, E, Increment<I>, false>]
@@ -50,7 +50,7 @@ type _FillReturn<
       
     
  
-type FillReturn<T extends any[], C, S extends number = 0, E extends number = T["length"]> = T extends [any, ...any[]]
+type FillReturn<T extends readonly any[], C, S extends number = 0, E extends number = T["length"]> = T extends readonly [any, ...any[]]
   ? _FillReturn<
       T, 
       C, 
@@ -94,6 +94,9 @@ type T10 = FillReturn<(number | string)[], "a", -4>
 //   ^?
 
 type T11 = FillReturn<any[], "a">
+//   ^?
+
+type T12 = FillReturn<readonly [1, 2, 3, 4, 5, 6], "a", -4>
 //   ^?
 
 

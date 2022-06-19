@@ -131,6 +131,14 @@ export type IsNegative<T extends number> = `${T}` extends `-${number}` ? true : 
 
 export type IsStringRecord<T> = string extends keyof T ? true : false
 
+export type IsRecord<T> = string extends keyof T 
+  ? true 
+  : T extends readonly any[] 
+    ? false
+    : number extends keyof T 
+      ? true 
+      : false
+
 export type IfAny<T, Y, N> = 0 extends (1 & T) ? Y : N
 
 export type IsAny<T> = 0 extends (1 & T) ? true : false
@@ -145,13 +153,15 @@ export type _ConvertNegativeIndex<L extends number, I extends string> = I extend
   ? L
   : _ConvertNegativeIndex<Decrement<L>, `${Decrement<I> & number}`>
 
-export type ConvertNegativeIndex<T extends any[] | string, N extends number> = 
+export type ConvertNegativeIndex<T extends readonly any[] | string, N extends number> = 
   IsNegative<N> extends true 
   ? _ConvertNegativeIndex<T extends string ? StringLength<T> :  T["length"], `${Abs<N>}`> extends infer SI extends number 
     ? SI 
     : never 
   : N
   
+export type IsWideString<T> = string extends T ? true : false
+
 export class Test {
   a!: string
 

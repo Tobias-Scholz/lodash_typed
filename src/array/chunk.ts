@@ -18,19 +18,19 @@ const d = chunk(['a'], 0)
 
 
 type _ChunkReturn<
-  T extends any[],
+  T extends readonly any[],
   P extends number,
   I extends any[] = [],
   R extends any[][] = []
 > = T['length'] extends 0
   ? [...R, I]
-  : T extends [infer First, ...infer Rest]
+  : T extends readonly [infer First, ...infer Rest]
     ? I['length'] extends P
         ? _ChunkReturn<T, P, [], [...R, I]>
         : _ChunkReturn<Rest, P, [...I, First], R>
     : T[number][][]
 
-type ChunkReturn<T extends any[], P extends number> = 
+type ChunkReturn<T extends readonly any[], P extends number> = 
   IsAny<P> extends true
     ? IsAny<T> extends true 
       ? any[][]
@@ -39,7 +39,7 @@ type ChunkReturn<T extends any[], P extends number> =
       ? P extends 0
         ? []
         : any[][]
-      : T extends []
+      : T extends readonly []
         ? []
         : P extends 0 
           ? [] 
@@ -95,6 +95,12 @@ type T14 = ChunkReturn<string[], any>
 //   ^?
 
 type T15 = ChunkReturn<['a', 'b', 'c', 'd', 'e'], any>
+//   ^?
+
+type T16 = ChunkReturn<readonly ['a', 'b', 'c', 'd', 'e'], 3>
+//   ^?
+
+type T17 = ChunkReturn<readonly [], 3>
 //   ^?
 
 

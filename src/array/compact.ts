@@ -41,13 +41,13 @@ type __A = [1, 2, 3, "a"]
 
 type Falsey = 0 | false | undefined | null | ''
 
-type CompactReturn<T extends any[]> = 
+type CompactReturn<T extends readonly any[]> = 
   IfAny<
     T, 
     any[], 
     T["length"] extends 0 
       ? T
-      : T extends [infer L, ...infer R]
+      : T extends readonly [infer L, ...infer R]
         ? L extends Falsey
           ? CompactReturn<R>
           : [L, ...CompactReturn<R>]
@@ -72,6 +72,9 @@ type T4 = CompactReturn<any[]>
 //   ^?
 
 type T5 = CompactReturn<any>
+//   ^?
+
+type T6 = CompactReturn<readonly [0, 1, false, 2, '', 'a', undefined, 'b', null, 3]>
 //   ^?
 
 

@@ -22,7 +22,7 @@ const e = concat([], 2)
 
 
 type _ConcatReturn<T extends any[]> = T extends [infer L, ...infer R]
-  ? L extends any[] 
+  ? L extends readonly any[] 
     ? [...L, ..._ConcatReturn<R>]
     : [L, ..._ConcatReturn<R>]
   : []
@@ -65,6 +65,9 @@ type T8 = ConcatReturn<[any, number[]]>
 //   ^?
 
 type T9 = ConcatReturn<any>
+//   ^?
+
+type T10 = ConcatReturn<[readonly [0, "b"], readonly [2, "a"], 4]>
 //   ^?
 
 
